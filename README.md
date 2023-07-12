@@ -53,8 +53,3 @@ The CookMaster Desktop App uses the following dependencies:
 - JSON 20210307
 
 Please refer to the `build.gradle` file for the complete list of dependencies.
-
-## Testing
-
-The project includes unit tests using JUnit 5. To run the tests, use the following command:
-
