@@ -1,0 +1,94 @@
+plugins {
+    id 'java'
+    id 'application'
+    id 'org.javamodularity.moduleplugin' version '1.8.12'
+    id 'org.openjfx.javafxplugin' version '0.0.13'
+    id 'org.beryx.jlink' version '2.25.0'
+
+    // Keycloak
+    id 'org.springframework.boot' version '2.6.0'
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+}
+
+group 'com.cmdpresta.cookmaster'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+    jcenter() // Add JCenter repository
+}
+
+ext {
+    junitVersion = '5.9.2'
+}
+
+sourceCompatibility = '17'
+targetCompatibility = '17'
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}
+
+application {
+    mainModule = 'com.cmdpresta.cookmaster.cookmasterapp'
+    mainClass = 'com.cmdpresta.cookmaster.cookmasterapp.LoginPage'
+}
+
+javafx {
+    version = '17.0.6'
+    modules = ['javafx.controls', 'javafx.fxml']
+}
+
+dependencies {
+    implementation('org.controlsfx:controlsfx:11.1.2')
+    implementation('com.dlsc.formsfx:formsfx-core:11.6.0') {
+        exclude(group: 'org.openjfx')
+    }
+    implementation('org.kordamp.bootstrapfx:bootstrapfx-core:0.4.0')
+
+    // JSON Processing
+    implementation 'org.json:json:20210307'
+
+    implementation('org.jfree:jfreechart:1.5.3')
+    implementation('org.apache.pdfbox:pdfbox:2.0.24')
+
+
+
+    /*// Keycloak dependencies
+    implementation ('org.keycloak:keycloak-admin-client:21.1.1'){
+        exclude group: 'org.keycloak', module: 'adaptaters'
+        exclude group: 'keycloak.spring.boot.adapter.core', module: 'spring-boot-adapter-core'
+        exclude group: 'keycloak.spring.boot.2.adapter', module: 'spring-boot-2-adapter'
+    }
+
+
+    implementation ('org.keycloak:keycloak-core:21.1.1'){
+      *//*  exclude group: 'keycloak.spring.boot.adapter.core', module: 'spring-boot-adapter-core'
+        exclude group: 'keycloak.spring.boot.2.adapter', module: 'spring-boot-2-adapter'*//*
+    }
+
+    // Add the specific modules you need from each Keycloak dependency
+*//*    implementation ('keycloak.spring.boot.adapter.core:spring-boot-adapter-core')
+    implementation ('keycloak.spring.boot.2.adapter:spring-boot-2-adapter')*//*
+
+    // Remaining dependencies...*/
+
+    testImplementation("org.junit.jupiter:junit-jupiter-api:${junitVersion}")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${junitVersion}")
+}
+
+test {
+    useJUnitPlatform()
+}
+
+jlink {
+    imageZip = project.file("${buildDir}/distributions/app-${javafx.platform.classifier}.zip")
+    options = ['--strip-debug', '--compress', '2', '--no-header-files', '--no-man-pages']
+    launcher {
+        name = 'app'
+    }
+}
+
+jlinkZip {
+    group = 'distribution'
+}
